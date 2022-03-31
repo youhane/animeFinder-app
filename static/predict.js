@@ -11,6 +11,7 @@ $("#image-selector").change(function () {
 	
 	let file = $("#image-selector").prop('files')[0];
 	reader.readAsDataURL(file);
+	$("#anime-title").text(" ");
 });
 
 let model;
@@ -61,14 +62,34 @@ $("#predict-button").click(async function () {
 	// API JIKAN
 	const BASE_URL = 'https://api.jikan.moe/v4/'
 	let search = 'anime?q=' + inputAnimeName
+	let animeId;
 
 	$.ajax({
 		url: BASE_URL + search,
 		type: 'get',
 		dataType: 'json',
 		success: (result) => {
-			$("#prediction-list").html(`<h1>${result.data[0].title}</h1>`);
+			$("#anime-title").text(`${result.data[0].title}`);
+			console.log(result.data[0].mal_id)
+			animeId = result.data[0].mal_id
+			console.log(animeId)
 			console.log(result.data)
+			$.ajax({
+				url: BASE_URL + 'anime/' + animeId + '/pictures',
+				type: 'get',
+				dataType: 'json',
+				success: (result) => {
+					console.log(result)
+					$("#poster").attr("src", result.data[0].jpg.image_url);
+					console.log(result.data)
+				},
+				error : () => {
+					$("#anime-title").text(`Dunno`);
+				}
+			})
+		},
+		error : () => {
+			$("#anime-title").text(`Dunno`);
 		}
 	})
 });
