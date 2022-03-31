@@ -26,6 +26,13 @@ $( document ).ready(async function () {
 	modelLoaded = true;
 });
 
+
+// API JIKAN
+const BASE_URL = 'https://api.jikan.moe/v4/'
+var similarChara
+
+
+
 $("#predict-button").click(async function () {
 	if (!modelLoaded) { alert("The model must be loaded first"); return; }
 	if (!imageLoaded) { alert("Please select an image first"); return; }
@@ -57,39 +64,37 @@ $("#predict-button").click(async function () {
 	});
 
 	const inputAnimeName = top5[0].animeName
-	console.log(inputAnimeName)
+	similarChara = [top5[0].className, top5[1].className, top5[2].className, top5[3].className]
 
-	// API JIKAN
-	const BASE_URL = 'https://api.jikan.moe/v4/'
 	let search = 'anime?q=' + inputAnimeName
 	let animeId;
 
-	$.ajax({
-		url: BASE_URL + search,
-		type: 'get',
-		dataType: 'json',
-		success: (result) => {
-			$("#anime-title").text(`${result.data[0].title}`);
-			console.log(result.data[0].mal_id)
-			animeId = result.data[0].mal_id
-			console.log(animeId)
-			console.log(result.data)
-			$.ajax({
-				url: BASE_URL + 'anime/' + animeId + '/pictures',
-				type: 'get',
-				dataType: 'json',
-				success: (result) => {
-					console.log(result)
-					$("#poster").attr("src", result.data[0].jpg.image_url);
-					console.log(result.data)
-				},
-				error : () => {
-					$("#anime-title").text(`Dunno`);
+	$.get(`${BASE_URL}${search}`, (res) => {
+		// Get Title
+		$("#anime-title").text(`${res.data[0].title}`);
+        $("#poster").attr("src", res.data[0].images.jpg.image_url);
+		animeId = res.data[0].mal_id
+
+		// Get chara id
+		$.get(`${BASE_URL}characters?q=${similarChara[0]}`, (res) => {
+			let charaId = res.data[0].mal_id
+			$.get(`${BASE_URL}characters/${charaId}/pictures`, (res) => {
+				for (let index = 1; index <= 3; index++) {
+					$("#same-chara").append(`<img src="${res.data[index].jpg.image_url}" />`)
 				}
 			})
-		},
-		error : () => {
-			$("#anime-title").text(`Dunno`);
-		}
+		})
 	})
 });
+
+$('#morechara').click(() => {
+	// Get other similar chara id
+	for (let i = 1; i <= 4; i++) {
+		$.get(`${BASE_URL}characters?q=${similarChara[i]}`, (res) => {
+			let charaId = res.data[0].mal_id
+			$.get(`${BASE_URL}characters/${charaId}/pictures`, (res) => {
+				$("#similar-chara").append(`<img src="${res.data[0].jpg.image_url}" /><p>${similarChara[i]}</p>`)
+			})
+		})
+	}
+})
