@@ -12,15 +12,18 @@ $("#image-selector").change(function () {
 	
 	let file = $("#image-selector").prop('files')[0];
 	reader.readAsDataURL(file);
+
 	$("#anime-title").text(" ");
 	$("#same-chara").empty();
 });
 
 $("#url-selector").change(function () {
 	let dataURL = $("#url-selector").val()
+
 	imageLoaded = false;
 	$(".selected-image").attr("src", dataURL);
 	imageLoaded = true;	
+
 	$("#anime-title").text(" ");
 });
 
@@ -49,7 +52,7 @@ $("#predict-button").click(async function () {
 	$("#morechara").removeClass("d-none");
 	$(".selected-image-res").attr("src", imgSrc);
 	
-	// betak imagenya
+	// Ambil imagenya
 	let image = $('.selected-image').get(0);
 	
 	// Pre-process the image
@@ -58,8 +61,10 @@ $("#predict-button").click(async function () {
 	.resizeNearestNeighbor([96,96])
 		.expandDims(0)
 		.div(tf.scalar(255.0))
+
 	let predictions = await model.predict(tensor).data();
 	// console.log(predictions);
+
 	let top5 = Array.from(predictions)
 		.map(function (p, i) { // this is Array.map
 			return {
@@ -72,6 +77,7 @@ $("#predict-button").click(async function () {
 		}).slice(0, 5);
 
 	$("#prediction-list").empty();
+	
 	top5.forEach(function (p) {
 		$("#prediction-list").append(`<li>${p.className} - ${p.animeName}: ${p.probability.toFixed(2)} %</li>`);
 	});
@@ -94,7 +100,7 @@ $("#predict-button").click(async function () {
 			let charaId = res.data[0].mal_id
 			$.get(`${BASE_URL}characters/${charaId}/pictures`, (res) => {
 				for (let index = 1; index <= 4; index++) {
-					$("#same-chara").append(`<img src="${res.data[index].jpg.image_url}" width="70" />`)
+					$("#same-chara").append(`<img src="${res.data[index].jpg.image_url}" width="90" />`)
 				}
 			})
 		})
@@ -103,6 +109,7 @@ $("#predict-button").click(async function () {
 
 $('#morechara').click(() => {
 	$("#similar-chara").empty()
+	
 	// Get other similar chara id
 	// CharaNumber
 	let charaNumber = Math.floor(Math.random()*similarChara.length)
