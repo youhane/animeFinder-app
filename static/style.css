@@ -10,8 +10,16 @@ body{
 }
 
 #main{
-    margin-top: 10rem;
-    /* display: none !important; */
+    margin-top: 15.5rem;
+    margin-bottom: 15.5rem;
+}
+
+.hide{
+    display: none !important;
+}
+
+#main h2{
+    font-size: 1rem;
 }
 
 .title p{
@@ -40,6 +48,10 @@ body{
     width: 35rem;
 }
 
+.selected-image{
+    position: absolute;
+}
+
 .smol{
     padding: .5rem;
     border-radius: 1rem;
@@ -55,13 +67,40 @@ body{
     margin-top: .5rem;
 }
 
+#anime-title{
+    margin: 1rem 0;
+    font-weight: 700;
+}
+
+.other-pics{
+    border-radius: 1rem;
+    object-fit: cover;
+    width: 5rem;
+    height: 5rem;
+}
+
 #poster{
     width: 20%;
-    height: 5%;
+    height: 10%;
+    margin-right: 5rem;
+}
+
+.chara-bio{
+    margin-left: 5rem;
+}
+
+#chara-name{
+    margin-top: 1rem;
+    font-weight: 700;
 }
 
 #same-chara img{
     margin-left: 1rem;
+}
+
+.similarChara{
+    margin-top: 3rem;
+    margin-bottom: 5rem;
 }
 
 footer{

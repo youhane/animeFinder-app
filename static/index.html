@@ -30,29 +30,45 @@
 			</div>
 
 			<div class="align-self-end">
-				<h2 class="">Selected Image</h2>
+				<h2>Selected Image</h2>
 				<img class="selected-image" width="150" alt="" crossorigin="anonymous"> 
 			</div>
 		</section>
 
-		<section id="results" class="container mt-5">
-			<div class="d-flex justify-content-around">
+		<section id="results">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+				<div class="container-fluid">
+				  <a class="navbar-brand" href="#">Searchara</a>
+				  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				  </button>
+				  <div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav">
+					  <li class="nav-item">
+						<a class="nav-link" id="back">Back</a>
+					  </li>
+					</ul>
+				  </div>
+				</div>
+			</nav>
+
+			<div class="d-flex justify-content-center">
 				<img id="poster">
-				<div>
-					<img class="selected-image-res" width="100" alt="" crossorigin="anonymous"> 
+				<div class="chara-bio d-flex flex-column">
+					<img class="selected-image-res" width="150" alt="" crossorigin="anonymous"> 
 					<h2 id="chara-name"></h2>
-					<ol id="prediction-list"></ol>
+					<!-- <ol id="prediction-list"></ol> -->
 					<h3 id="anime-title"></h3>
 					<div id="same-chara"></div>
 				</div>
 			</div>
-			<div>
-				<button id="morechara" class="btn btn-primary my-5 d-none">Find Similar Characters!</button>
-				<div id="similar-chara"></div>
+			<div class="w-100 d-flex align-items-center justify-content-center similarChara">
+				<button id="morechara" class="btn btn-primary my-5 mr-5">Find Similar Characters!</button>
+				<div id="similar-chara" class="d-flex align-items-center"></div>
 			</div>
 		</section>
 
-		<footer class="d-lg-flex justify-content-between px-5 fixed-bottom pt-3">
+		<footer class="d-lg-flex justify-content-between px-5 pt-3">
 			<p>© 2022 Searchara. All right reserved</p>
 			<div class="d-lg-flex">
 				<p>What is a good picture?</p>
@@ -67,6 +83,6 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
 		<script src="target_classes.js"></script>
-		<script src="predict.js"></script> 
+		<script src="predict.js"></script>
 	</body>
 </html>

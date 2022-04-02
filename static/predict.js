@@ -17,6 +17,7 @@ $("#image-selector").change(function () {
 	$("#same-chara").empty();
 });
 
+
 $("#url-selector").change(function () {
 	let dataURL = $("#url-selector").val()
 
@@ -27,9 +28,11 @@ $("#url-selector").change(function () {
 	$("#anime-title").text(" ");
 });
 
+
 let model;
 let modelLoaded = false;
 $( document ).ready(async function () {
+	$("#results").hide()
 	modelLoaded = false;
 	$('.progress-bar').show();
     console.log( "Loading model..." );
@@ -47,6 +50,9 @@ var similarChara
 $("#predict-button").click(async function () {
 	if (!modelLoaded) { alert("The model must be loaded first"); return; }
 	if (!imageLoaded) { alert("Please select an image first"); return; }
+
+	$("#main").addClass("hide")
+	$("#results").fadeIn()
 
 	$("#same-chara").empty();
 	$("#morechara").removeClass("d-none");
@@ -85,7 +91,8 @@ $("#predict-button").click(async function () {
 	$("#chara-name").text(`${top5[0].className} (${top5[0].probability.toFixed(2)} %)`);
 
 	const inputAnimeName = top5[0].animeName
-	similarChara = [top5[0].className, top5[1].className, top5[2].className, top5[3].className]
+	similarChara = [top5[0], top5[1], top5[2], top5[3]]
+	console.log(similarChara)
 
 	let search = 'anime?q=' + inputAnimeName
 
@@ -96,11 +103,11 @@ $("#predict-button").click(async function () {
 		animeId = res.data[0].mal_id
 
 		// Get chara id
-		$.get(`${BASE_URL}characters?q=${similarChara[0]}`, (res) => {
+		$.get(`${BASE_URL}characters?q=${similarChara[0].className}`, (res) => {
 			let charaId = res.data[0].mal_id
 			$.get(`${BASE_URL}characters/${charaId}/pictures`, (res) => {
 				for (let index = 1; index <= 4; index++) {
-					$("#same-chara").append(`<img src="${res.data[index].jpg.image_url}" width="90" />`)
+					$("#same-chara").append(`<img class="other-pics" src="${res.data[index].jpg.image_url}" width="90" />`)
 				}
 			})
 		})
@@ -115,10 +122,19 @@ $('#morechara').click(() => {
 	let charaNumber = Math.floor(Math.random()*similarChara.length)
 	charaNumber = charaNumber === 0 ? charaNumber+1 : charaNumber
 
-	$.get(`${BASE_URL}characters?q=${similarChara[charaNumber]}`, (res) => {
+	$.get(`${BASE_URL}characters?q=${similarChara[charaNumber].className}`, (res) => {
+		console.log(res)
 		let charaId = res.data[0].mal_id
 		$.get(`${BASE_URL}characters/${charaId}/pictures`, (res) => {
-			$("#similar-chara").append(`<img src="${res.data[0].jpg.image_url}" /><p>${similarChara[charaNumber]}</p>`)
+			$("#similar-chara").append(`<img src="${res.data[0].jpg.image_url}" width="150" />
+			<div>
+				<p class="ml-3">${similarChara[charaNumber].className}</p>
+				<p class="ml-3">${similarChara[charaNumber].animeName}</p>
+			</div>`)
 		})
 	})
+})
+
+$("#back").click(() => {
+	location.reload()
 })
